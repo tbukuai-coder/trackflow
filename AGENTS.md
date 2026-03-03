@@ -18,11 +18,13 @@ This document helps AI coding agents understand and work with the Trackflow code
 ## Quick Commands
 
 ```bash
-npm run dev       # Start dev server (localhost:3000)
-npm run build     # Production build
-npm run lint      # Run ESLint
-npx drizzle-kit push    # Push schema changes to DB
-npx drizzle-kit studio  # Open DB GUI
+npm run dev           # Start dev server (localhost:3000)
+npm run build         # Production build
+npm run lint          # Run ESLint
+npm run test          # Run tests (watch mode)
+npm run test:run      # Run tests (single run)
+npx drizzle-kit push  # Push schema changes to DB
+npx drizzle-kit studio # Open DB GUI
 ```
 
 ## File Structure
@@ -271,14 +273,52 @@ if (!user) {
 }
 ```
 
-## Testing Changes
+## Testing
+
+### Running Tests
 
 ```bash
-# Type check
-npm run build
+npm run test          # Watch mode
+npm run test:run      # Single run
+npm run test:coverage # With coverage report
+```
 
-# Run dev server and test manually
-npm run dev
+### Test Structure
+
+```
+src/__tests__/
+├── setup.ts                    # Test setup (jest-dom matchers)
+├── lib/
+│   ├── permissions.test.ts     # Permission logic tests
+│   └── utils.test.ts           # Utility function tests
+└── components/                 # Component tests (add as needed)
+```
+
+### Writing Tests
+
+```typescript
+// src/__tests__/lib/example.test.ts
+import { describe, it, expect } from 'vitest';
+
+describe('featureName', () => {
+  it('should do something', () => {
+    expect(true).toBe(true);
+  });
+});
+```
+
+### Testing Guidelines
+
+1. **Pure functions** - Test directly (permissions, utils)
+2. **DB-dependent code** - Mock the db or copy logic for unit tests
+3. **Components** - Use `@testing-library/react`
+4. **Server actions** - Test with integration tests or mock db
+
+### Verify Before Committing
+
+```bash
+npm run test:run      # All tests pass
+npm run build         # Type check passes
 ```
 
 ## Notes for AI Agents
@@ -294,7 +334,7 @@ npm run dev
 9. **Check ROADMAP.md** for pending features
 10. **Optimistic updates** - update local state immediately, then call server action
 11. **Always handle loading/error states** in forms
-12. **Run `npm run build`** before committing to catch type errors
+12. **Run `npm run test:run && npm run build`** before committing
 
 ## ⚠️ IMPORTANT: Update Documentation After Each Feature
 

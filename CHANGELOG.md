@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-03-03
+
+### Added
+
+#### Testing Setup
+- Vitest for unit testing
+- Testing Library for React component tests
+- Test scripts: `npm run test`, `npm run test:run`, `npm run test:coverage`
+- Initial tests for permissions and utils
+- Testing guidelines in AGENTS.md
+
+### Files Added
+- `vitest.config.ts` - Vitest configuration
+- `src/__tests__/setup.ts` - Test setup file
+- `src/__tests__/lib/permissions.test.ts` - Permission logic tests
+- `src/__tests__/lib/utils.test.ts` - Utility function tests
+
 ## [0.3.0] - 2026-03-03
 
 ### Added

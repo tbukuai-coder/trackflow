@@ -73,6 +73,7 @@ trackflow/
 │   │   ├── sidebar.tsx               # Main navigation sidebar
 │   │   ├── workspace-switcher.tsx    # Workspace dropdown
 │   │   ├── task-board.tsx            # Kanban board component
+│   │   ├── task-detail-dialog.tsx    # Task view/edit modal
 │   │   ├── members-table.tsx         # Members list table
 │   │   ├── invites-table.tsx         # Pending invites table
 │   │   └── invite-member-dialog.tsx  # Invite form dialog
@@ -280,6 +281,42 @@ npm run build
 npm run dev
 ```
 
+## Task Edit Pattern
+
+The task detail dialog (`src/components/task-detail-dialog.tsx`) demonstrates the edit pattern:
+
+```typescript
+// 1. Component has view and edit modes
+const [isEditing, setIsEditing] = useState(false);
+
+// 2. Form state mirrors the task data
+const [title, setTitle] = useState(task.title);
+const [status, setStatus] = useState(task.status);
+// ... more fields
+
+// 3. Save calls server action with updated fields
+async function handleSave() {
+  const result = await updateTask(workspaceSlug, projectId, task.id, {
+    title,
+    status,
+    // ... more fields
+  });
+  if (result.success) {
+    setIsEditing(false);
+    onUpdate(); // Trigger parent refresh
+  }
+}
+
+// 4. Cancel resets form to original values
+function handleCancel() {
+  setTitle(task.title);
+  setStatus(task.status);
+  setIsEditing(false);
+}
+```
+
+Use this pattern for other edit dialogs (projects, workspace settings, etc.).
+
 ## Notes for AI Agents
 
 1. **Always check permissions** before mutations
@@ -292,3 +329,6 @@ npm run dev
 8. **Use server actions** for mutations, API routes for reads
 9. **Check ROADMAP.md** for pending features
 10. **Update CHANGELOG.md** after significant changes
+11. **Use view/edit mode pattern** for detail dialogs (see TaskDetailDialog)
+12. **Optimistic updates** - update local state immediately, then call server action
+13. **Always handle loading/error states** in forms

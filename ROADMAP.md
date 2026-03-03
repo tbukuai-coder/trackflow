@@ -18,12 +18,12 @@ This document outlines planned features and improvements for Trackflow. Contribu
   - Library suggestion: `@dnd-kit/core` or `react-beautiful-dnd`
   - Files: Update `src/components/task-board.tsx`
 
-- [ ] **Task Detail Modal/Page**
+- [x] **Task Detail Modal/Page** ✅ DONE
   - Full task view with all fields
   - Edit task inline
-  - Comments section
-  - Activity history
-  - Files: `src/components/task-detail.tsx`
+  - ~~Comments section~~ (pending)
+  - ~~Activity history~~ (pending)
+  - Files: `src/components/task-detail-dialog.tsx`
 
 ### Medium Priority
 

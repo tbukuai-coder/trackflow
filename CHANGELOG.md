@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-03
+
+### Added
+
+#### Task Edit Functionality
+- Task detail dialog with view and edit modes
+- Click any task card to open detail view
+- Edit all task fields: title, description, status, priority, assignee, due date
+- Delete task directly from detail dialog
+- Cancel button reverts unsaved changes
+- Optimistic UI updates for status changes
+
+### Components Added
+- `TaskDetailDialog` - full task view/edit modal
+
 ## [0.2.0] - 2026-03-03
 
 ### Added

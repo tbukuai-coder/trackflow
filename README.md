@@ -4,10 +4,11 @@ Simple project management for teams. Built with Next.js, Turso, Drizzle, and Luc
 
 ## Features
 
-- **Workspaces** - Create and manage multiple workspaces
+- **Workspaces** - Create and manage multiple workspaces with easy switcher
 - **Projects** - Organize work into projects
 - **Tasks** - Kanban-style task management (Todo, In Progress, Done)
-- **Team Collaboration** - Invite members with role-based permissions
+- **Task Details** - Click to view/edit tasks with full detail modal
+- **Team Collaboration** - Invite members by email with role-based permissions
 - **Activity Log** - Track all changes
 
 ## Tech Stack

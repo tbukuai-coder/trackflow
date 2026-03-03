@@ -13,6 +13,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { WorkspaceSwitcher } from "@/components/workspace-switcher";
+
+interface Workspace {
+  id: string;
+  name: string;
+  slug: string;
+  role: string;
+}
 
 interface SidebarProps {
   workspace: {
@@ -28,6 +36,7 @@ interface SidebarProps {
     id: string;
     name: string;
   }[];
+  allWorkspaces: Workspace[];
 }
 
 const navItems = [
@@ -37,20 +46,18 @@ const navItems = [
   { label: "Settings", href: "/settings" },
 ];
 
-export function Sidebar({ workspace, user, projects }: SidebarProps) {
+export function Sidebar({ workspace, user, projects, allWorkspaces }: SidebarProps) {
   const pathname = usePathname();
   const basePath = `/${workspace.slug}`;
 
   return (
     <div className="flex h-screen w-64 flex-col border-r bg-muted/30">
-      {/* Workspace header */}
-      <div className="flex h-14 items-center border-b px-4">
-        <Link href={basePath} className="flex items-center gap-2 font-semibold">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-sm">
-            {workspace.name.charAt(0).toUpperCase()}
-          </div>
-          <span className="truncate">{workspace.name}</span>
-        </Link>
+      {/* Workspace switcher */}
+      <div className="border-b p-2">
+        <WorkspaceSwitcher
+          currentWorkspace={workspace}
+          workspaces={allWorkspaces}
+        />
       </div>
 
       {/* Navigation */}

@@ -281,42 +281,6 @@ npm run build
 npm run dev
 ```
 
-## Task Edit Pattern
-
-The task detail dialog (`src/components/task-detail-dialog.tsx`) demonstrates the edit pattern:
-
-```typescript
-// 1. Component has view and edit modes
-const [isEditing, setIsEditing] = useState(false);
-
-// 2. Form state mirrors the task data
-const [title, setTitle] = useState(task.title);
-const [status, setStatus] = useState(task.status);
-// ... more fields
-
-// 3. Save calls server action with updated fields
-async function handleSave() {
-  const result = await updateTask(workspaceSlug, projectId, task.id, {
-    title,
-    status,
-    // ... more fields
-  });
-  if (result.success) {
-    setIsEditing(false);
-    onUpdate(); // Trigger parent refresh
-  }
-}
-
-// 4. Cancel resets form to original values
-function handleCancel() {
-  setTitle(task.title);
-  setStatus(task.status);
-  setIsEditing(false);
-}
-```
-
-Use this pattern for other edit dialogs (projects, workspace settings, etc.).
-
 ## Notes for AI Agents
 
 1. **Always check permissions** before mutations

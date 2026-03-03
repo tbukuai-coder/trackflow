@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createTask, updateTaskStatus, deleteTask } from "@/lib/actions/tasks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { TaskDetailDialog } from "@/components/task-detail-dialog";
 import type { Role } from "@/db/schema";
 
 interface Task {
@@ -47,6 +49,7 @@ interface Task {
   priority: "low" | "medium" | "high" | "urgent";
   assigneeId: string | null;
   dueDate: Date | null;
+  createdAt: Date;
   assignee: {
     id: string;
     name: string;
@@ -97,10 +100,15 @@ export function TaskBoard({
   members,
   userRole,
 }: TaskBoardProps) {
+  const router = useRouter();
   const [tasks, setTasks] = useState(initialTasks);
-  const [open, setOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Task detail dialog state
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const canEdit = userRole !== "viewer";
 
@@ -116,11 +124,9 @@ export function TaskBoard({
       return;
     }
 
-    setOpen(false);
+    setCreateOpen(false);
     setLoading(false);
-    
-    // Refresh tasks
-    window.location.reload();
+    router.refresh();
   }
 
   async function handleStatusChange(
@@ -135,18 +141,28 @@ export function TaskBoard({
     await updateTaskStatus(workspaceSlug, projectId, taskId, newStatus);
   }
 
-  async function handleDeleteTask(taskId: string) {
+  async function handleDeleteTask(taskId: string, e: React.MouseEvent) {
+    e.stopPropagation();
     if (!confirm("Are you sure you want to delete this task?")) return;
 
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
     await deleteTask(workspaceSlug, projectId, taskId);
   }
 
+  function handleTaskClick(task: Task) {
+    setSelectedTask(task);
+    setDetailOpen(true);
+  }
+
+  function handleTaskUpdate() {
+    router.refresh();
+  }
+
   return (
     <div>
       {canEdit && (
         <div className="mb-6">
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
               <Button>Add Task</Button>
             </DialogTrigger>
@@ -212,7 +228,7 @@ export function TaskBoard({
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                  <Button type="button" variant="outline" onClick={() => setCreateOpen(false)}>
                     Cancel
                   </Button>
                   <Button type="submit" disabled={loading}>
@@ -238,7 +254,11 @@ export function TaskBoard({
 
               <div className="space-y-3 min-h-[200px] p-2 bg-muted/30 rounded-lg">
                 {columnTasks.map((task) => (
-                  <Card key={task.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                  <Card 
+                    key={task.id} 
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => handleTaskClick(task)}
+                  >
                     <CardHeader className="p-4 pb-2">
                       <div className="flex items-start justify-between">
                         <CardTitle className="text-sm font-medium">
@@ -247,35 +267,57 @@ export function TaskBoard({
                         {canEdit && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-6 w-6 p-0"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 ⋮
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleTaskClick(task);
+                                }}
+                              >
+                                Edit Task
+                              </DropdownMenuItem>
                               {column.id !== "todo" && (
                                 <DropdownMenuItem
-                                  onClick={() => handleStatusChange(task.id, "todo")}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatusChange(task.id, "todo");
+                                  }}
                                 >
                                   Move to To Do
                                 </DropdownMenuItem>
                               )}
                               {column.id !== "in_progress" && (
                                 <DropdownMenuItem
-                                  onClick={() => handleStatusChange(task.id, "in_progress")}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatusChange(task.id, "in_progress");
+                                  }}
                                 >
                                   Move to In Progress
                                 </DropdownMenuItem>
                               )}
                               {column.id !== "done" && (
                                 <DropdownMenuItem
-                                  onClick={() => handleStatusChange(task.id, "done")}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatusChange(task.id, "done");
+                                  }}
                                 >
                                   Move to Done
                                 </DropdownMenuItem>
                               )}
                               <DropdownMenuItem
                                 className="text-red-600"
-                                onClick={() => handleDeleteTask(task.id)}
+                                onClick={(e) => handleDeleteTask(task.id, e)}
                               >
                                 Delete
                               </DropdownMenuItem>
@@ -321,6 +363,20 @@ export function TaskBoard({
           );
         })}
       </div>
+
+      {/* Task Detail Dialog */}
+      {selectedTask && (
+        <TaskDetailDialog
+          task={selectedTask}
+          workspaceSlug={workspaceSlug}
+          projectId={projectId}
+          members={members}
+          userRole={userRole}
+          open={detailOpen}
+          onOpenChange={setDetailOpen}
+          onUpdate={handleTaskUpdate}
+        />
+      )}
     </div>
   );
 }

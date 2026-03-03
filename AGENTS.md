@@ -328,7 +328,32 @@ Use this pattern for other edit dialogs (projects, workspace settings, etc.).
 7. **Lucia auth is deprecated** but works - don't upgrade without user consent
 8. **Use server actions** for mutations, API routes for reads
 9. **Check ROADMAP.md** for pending features
-10. **Update CHANGELOG.md** after significant changes
-11. **Use view/edit mode pattern** for detail dialogs (see TaskDetailDialog)
-12. **Optimistic updates** - update local state immediately, then call server action
-13. **Always handle loading/error states** in forms
+10. **Use view/edit mode pattern** for detail dialogs (see TaskDetailDialog)
+11. **Optimistic updates** - update local state immediately, then call server action
+12. **Always handle loading/error states** in forms
+
+## ⚠️ IMPORTANT: Update Documentation After Each Feature
+
+After completing a feature, **always update these files before committing**:
+
+| File | What to update |
+|------|----------------|
+| **CHANGELOG.md** | Add entry under `[Unreleased]` or new version section |
+| **ROADMAP.md** | Mark completed features with `[x]` and ✅ DONE |
+| **AGENTS.md** | Add new files to file structure, add patterns/examples if relevant |
+| **README.md** | Update features list if user-facing |
+
+### Example commit flow:
+
+```bash
+# 1. Implement feature
+# 2. Update documentation
+# 3. Commit together
+git add -A
+git commit -m "Add [feature name]
+
+- Feature description
+- Update CHANGELOG.md, ROADMAP.md, AGENTS.md"
+```
+
+**Do NOT skip documentation updates.** Future developers and AI agents rely on these files to understand the codebase.

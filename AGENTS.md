@@ -292,9 +292,9 @@ npm run dev
 7. **Lucia auth is deprecated** but works - don't upgrade without user consent
 8. **Use server actions** for mutations, API routes for reads
 9. **Check ROADMAP.md** for pending features
-10. **Use view/edit mode pattern** for detail dialogs (see TaskDetailDialog)
-11. **Optimistic updates** - update local state immediately, then call server action
-12. **Always handle loading/error states** in forms
+10. **Optimistic updates** - update local state immediately, then call server action
+11. **Always handle loading/error states** in forms
+12. **Run `npm run build`** before committing to catch type errors
 
 ## ⚠️ IMPORTANT: Update Documentation After Each Feature
 

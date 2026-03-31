@@ -33,7 +33,7 @@ jobs:
         env:
           LLM_API_KEY: ${{ secrets.LONGCHAT_API_KEY }}
           LLM_API_TYPE: openai
-          MODEL: "LongCat-Flash-Thinking-2601"
+          MODEL: "LongCat-Flash-Chat"
           LLM_API_BASE: "https://api.longcat.chat/openai"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER_FROM_WORKFLOW_DISPATCH: ${{ github.event.inputs.pr_number }}

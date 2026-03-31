@@ -1,0 +1,25 @@
+# Gito configuration
+# Exclude large / generated / noisy files from AI review context
+
+[exclude]
+# File globs to ignore when collecting context/diffs
+files = [
+  "package-lock.json",
+  "pnpm-lock.yaml",
+  "yarn.lock",
+  "**/*.lock",
+  "node_modules/**",
+  ".next/**",
+  "dist/**",
+  "build/**",
+  "coverage/**",
+  "**/*.min.*",
+  "**/*.map",
+]
+
+# Optional: cap huge text blobs if supported by your gito version
+[limits]
+# max number of files to include in a single context bundle
+max_files = 200
+# max total characters across all included files/diffs
+max_chars = 800000

@@ -34,7 +34,7 @@ jobs:
           LLM_API_KEY: ${{ secrets.LONGCHAT_API_KEY }}
           LLM_API_TYPE: openai
           MODEL: "LongCat-Flash-Thinking-2601"
-          OPENAI_API_BASE: "https://api.longcat.chat/openai"
+          LLM_API_BASE: "https://api.longcat.chat/openai"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gito --verbose review

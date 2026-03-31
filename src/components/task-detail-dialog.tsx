@@ -211,7 +211,10 @@ export function TaskDetailDialog({
             <div className="space-y-2">
               <Label>Status</Label>
               {isEditing ? (
-                <Select value={status} onValueChange={(v: any) => setStatus(v)}>
+                <Select
+                  value={status}
+                  onValueChange={(v) => setStatus(v as Task["status"])}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -229,7 +232,10 @@ export function TaskDetailDialog({
             <div className="space-y-2">
               <Label>Priority</Label>
               {isEditing ? (
-                <Select value={priority} onValueChange={(v: any) => setPriority(v)}>
+                <Select
+                  value={priority}
+                  onValueChange={(v) => setPriority(v as Task["priority"])}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

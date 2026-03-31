@@ -5,6 +5,7 @@ import { requireWorkspaceAccess } from "@/lib/permissions";
 import { db } from "@/db";
 import { projects, tasks, users, workspaceMembers } from "@/db/schema";
 import { TaskBoard } from "@/components/task-board";
+import { ProjectHeader } from "@/components/project-header";
 
 interface ProjectPageProps {
   params: Promise<{ workspace: string; projectId: string }>;
@@ -67,12 +68,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">{project.name}</h1>
-        {project.description && (
-          <p className="text-muted-foreground mt-1">{project.description}</p>
-        )}
-      </div>
+      <ProjectHeader
+        workspaceSlug={workspaceSlug}
+        projectId={projectId}
+        name={project.name}
+        description={project.description}
+        canEdit={role !== "viewer"}
+      />
 
       <TaskBoard
         workspaceSlug={workspaceSlug}

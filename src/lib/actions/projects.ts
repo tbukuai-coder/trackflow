@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
 import { projects, activityLog } from "@/db/schema";
 import { validateRequest } from "@/lib/session";
-import { requireWorkspaceAccess, canCreateProject, canDeleteProject } from "@/lib/permissions";
+import { requireWorkspaceAccess, canCreateProject, canEditProject, canDeleteProject } from "@/lib/permissions";
 
 export async function createProject(workspaceSlug: string, formData: FormData) {
   const { user } = await validateRequest();
@@ -63,6 +63,10 @@ export async function updateProject(
 
   const { workspace, role } = await requireWorkspaceAccess(user.id, workspaceSlug, "member");
 
+  if (!canEditProject(role)) {
+    return { error: "You don't have permission to edit projects" };
+  }
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
 
@@ -109,7 +113,7 @@ export async function archiveProject(workspaceSlug: string, projectId: string) {
   const { user } = await validateRequest();
   if (!user) return { error: "Unauthorized" };
 
-  const { workspace, role } = await requireWorkspaceAccess(user.id, workspaceSlug, "admin");
+  const { workspace } = await requireWorkspaceAccess(user.id, workspaceSlug, "admin");
 
   await db
     .update(projects)

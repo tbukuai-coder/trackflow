@@ -68,7 +68,9 @@ export default async function WorkspaceLayout({
           email: user.email,
         }}
         projects={workspaceProjects}
-        allWorkspaces={allWorkspaces.filter(Boolean) as any}
+        allWorkspaces={allWorkspaces.filter(
+          (ws): ws is NonNullable<typeof ws> => Boolean(ws)
+        )}
       />
       <main className="flex-1 overflow-auto">{children}</main>
     </div>

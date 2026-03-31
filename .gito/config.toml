@@ -1,9 +1,11 @@
-# Gito configuration
-# Exclude large / generated / noisy files from AI review context
+# Gito project configuration
+# Reference: https://github.com/Nayjest/Gito#-configuration
 
-[exclude]
-# File globs to ignore when collecting context/diffs
-files = [
+# Files to provide as additional context to the model (optional)
+aux_files = []
+
+# Exclude large / generated / noisy files from review context
+exclude_files = [
   "package-lock.json",
   "pnpm-lock.yaml",
   "yarn.lock",
@@ -17,9 +19,8 @@ files = [
   "**/*.map",
 ]
 
-# Optional: cap huge text blobs if supported by your gito version
-[limits]
-# max number of files to include in a single context bundle
-max_files = 200
-# max total characters across all included files/diffs
-max_chars = 800000
+[prompt_vars]
+# You can inject additional project-specific review requirements here.
+# requirements = """
+# - ...
+# """

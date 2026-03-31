@@ -33,8 +33,8 @@ jobs:
         env:
           LLM_API_KEY: ${{ secrets.LONGCHAT_API_KEY }}
           LLM_API_TYPE: openai
-          MODEL: "LongChat-7B-32K"
-          OPENAI_API_BASE: "https://api.lightning.ai/longchat/v1"
+          MODEL: "LongCat-Flash-Thinking-2601"
+          OPENAI_API_BASE: "https://api.longcat.chat/openai"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER_FROM_WORKFLOW_DISPATCH: ${{ github.event.inputs.pr_number }}
         run: |

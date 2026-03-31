@@ -17,14 +17,14 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Install AI Code Review tool
         run: pip install gito.bot~=4.0
@@ -36,14 +36,13 @@ jobs:
           MODEL: "LongCat-Flash-Thinking-2601"
           OPENAI_API_BASE: "https://api.longcat.chat/openai"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER_FROM_WORKFLOW_DISPATCH: ${{ github.event.inputs.pr_number }}
         run: |
           gito --verbose review
-          gito github-comment --token ${{ secrets.GITHUB_TOKEN }}
+          gito github-comment
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
-          name: ai-code-review-results
+          name: gito-code-review-results
           path: |
             code-review-report.md
             code-review-report.json

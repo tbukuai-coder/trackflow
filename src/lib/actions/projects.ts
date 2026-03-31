@@ -113,7 +113,7 @@ export async function archiveProject(workspaceSlug: string, projectId: string) {
   const { user } = await validateRequest();
   if (!user) return { error: "Unauthorized" };
 
-  const { workspace, role } = await requireWorkspaceAccess(user.id, workspaceSlug, "admin");
+  const { workspace } = await requireWorkspaceAccess(user.id, workspaceSlug, "admin");
 
   await db
     .update(projects)

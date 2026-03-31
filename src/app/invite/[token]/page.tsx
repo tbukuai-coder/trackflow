@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useCallback, useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { acceptInvite } from "@/lib/actions/members";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ export default function InvitePage({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  async function handleAccept() {
+  const handleAccept = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -47,16 +47,19 @@ export default function InvitePage({
         router.push(result.workspaceSlug ? `/${result.workspaceSlug}` : "/");
       }, 1500);
     }
-  }
+  }, [router, token]);
 
   // Check for pending invite after login
   useEffect(() => {
     const pendingToken = sessionStorage.getItem("pendingInvite");
     if (pendingToken === token) {
       sessionStorage.removeItem("pendingInvite");
-      handleAccept();
+      // Defer to the next tick to avoid setState-in-effect cascading renders
+      setTimeout(() => {
+        void handleAccept();
+      }, 0);
     }
-  }, [token]);
+  }, [token, handleAccept]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">

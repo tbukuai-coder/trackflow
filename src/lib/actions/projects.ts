@@ -15,10 +15,6 @@ export async function createProject(workspaceSlug: string, formData: FormData) {
 
   const { workspace, role } = await requireWorkspaceAccess(user.id, workspaceSlug, "member");
 
-  if (!canEditProject(role)) {
-    return { error: "You don't have permission to edit projects" };
-  }
-
   if (!canCreateProject(role)) {
     return { error: "You don't have permission to create projects" };
   }
@@ -40,7 +36,6 @@ export async function createProject(workspaceSlug: string, formData: FormData) {
     createdBy: user.id,
   });
 
-  // Log activity
   await db.insert(activityLog).values({
     id: nanoid(),
     workspaceId: workspace.id,

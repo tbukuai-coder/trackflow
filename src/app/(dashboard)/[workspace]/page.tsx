@@ -1,4 +1,4 @@
-import { eq, and, count } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { validateRequest } from "@/lib/session";
 import { requireWorkspaceAccess } from "@/lib/permissions";
 import { db } from "@/db";

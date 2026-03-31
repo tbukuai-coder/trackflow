@@ -32,11 +32,11 @@ export async function createTask(
     return { error: "Project not found" };
   }
 
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const priority = formData.get("priority") as string;
-  const assigneeId = formData.get("assigneeId") as string;
-  const dueDate = formData.get("dueDate") as string;
+  const title = String(formData.get("title") ?? "");
+  const description = String(formData.get("description") ?? "");
+  const priority = formData.get("priority");
+  const assigneeId = formData.get("assigneeId");
+  const dueDate = formData.get("dueDate");
 
   if (!title || title.trim().length === 0) {
     return { error: "Task title is required" };
@@ -44,14 +44,26 @@ export async function createTask(
 
   const taskId = nanoid();
 
+  // Validate enums coming from FormData
+  const priorityValue =
+    priority === "low" ||
+    priority === "medium" ||
+    priority === "high" ||
+    priority === "urgent"
+      ? priority
+      : "medium";
+
+  const assigneeIdValue = typeof assigneeId === "string" ? assigneeId : "";
+  const dueDateValue = typeof dueDate === "string" ? dueDate : "";
+
   await db.insert(tasks).values({
     id: taskId,
     projectId,
     title: title.trim(),
-    description: description?.trim() || null,
-    priority: (priority as any) || "medium",
-    assigneeId: assigneeId || null,
-    dueDate: dueDate ? new Date(dueDate) : null,
+    description: description.trim() || null,
+    priority: priorityValue,
+    assigneeId: assigneeIdValue || null,
+    dueDate: dueDateValue ? new Date(dueDateValue) : null,
     createdBy: user.id,
   });
 
@@ -93,7 +105,9 @@ export async function updateTask(
     return { error: "You don't have permission to edit tasks" };
   }
 
-  const updateData: any = { updatedAt: new Date() };
+  const updateData: Partial<typeof tasks.$inferInsert> & { updatedAt: Date } = {
+    updatedAt: new Date(),
+  };
 
   if (data.title !== undefined) updateData.title = data.title.trim();
   if (data.description !== undefined) updateData.description = data.description?.trim() || null;
@@ -131,7 +145,11 @@ export async function deleteTask(
   const { user } = await validateRequest();
   if (!user) return { error: "Unauthorized" };
 
-  const { workspace, role } = await requireWorkspaceAccess(user.id, workspaceSlug, "member");
+  const { role } = await requireWorkspaceAccess(user.id, workspaceSlug, "member");
+
+  if (!canEditTask(role)) {
+    return { error: "You don't have permission to delete tasks" };
+  }
 
   await db
     .delete(tasks)

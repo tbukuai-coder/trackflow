@@ -119,7 +119,7 @@ export async function login(formData: FormData) {
   });
 
   if (membership) {
-    redirect(`/${(membership as any).workspace.slug}`);
+    redirect(`/${membership.workspace.slug}`);
   }
 
   redirect("/");

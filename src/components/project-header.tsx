@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { updateProject } from "@/lib/actions/projects";
-import { canEditProject } from "@/lib/permissions";
-import type { Role } from "@/db/schema";
 
 interface ProjectHeaderProps {
   workspaceSlug: string;
   projectId: string;
   name: string;
   description: string | null;
-  role: Role;
+  canEdit: boolean;
 }
 
 export function ProjectHeader({
@@ -18,13 +16,12 @@ export function ProjectHeader({
   projectId,
   name,
   description,
-  role,
+  canEdit,
 }: ProjectHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const canEdit = canEditProject(role);
 
   const handleSave = async () => {
     if (!editName.trim()) return;

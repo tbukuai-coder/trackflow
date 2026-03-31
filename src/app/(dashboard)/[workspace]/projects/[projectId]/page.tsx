@@ -73,7 +73,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         projectId={projectId}
         name={project.name}
         description={project.description}
-        role={role}
+        canEdit={role !== "viewer"}
       />
 
       <TaskBoard

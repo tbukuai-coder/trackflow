@@ -62,7 +62,6 @@ export async function requireWorkspaceAccess(
 export const canManageMembers = (role: Role) => hasPermission(role, "admin");
 export const canDeleteWorkspace = (role: Role) => role === "owner";
 export const canCreateProject = (role: Role) => hasPermission(role, "member");
-export const canEditProject = (role: Role) => hasPermission(role, "member");
 export const canDeleteProject = (role: Role) => hasPermission(role, "admin");
 export const canEditTask = (role: Role) => hasPermission(role, "member");
 export const canComment = (role: Role) => hasPermission(role, "member");

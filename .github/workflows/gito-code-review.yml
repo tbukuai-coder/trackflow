@@ -35,6 +35,7 @@ jobs:
           LLM_API_TYPE: openai
           MODEL: "LongCat-Flash-Chat"
           LLM_API_BASE: "https://api.longcat.chat/openai"
+          MAX_CODE_TOKENS: 256000
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER_FROM_WORKFLOW_DISPATCH: ${{ github.event.inputs.pr_number }}
         run: |

@@ -144,3 +144,5 @@ npx drizzle-kit studio   # Open Drizzle Studio
 ## License
 
 MIT
+
+<!-- Test commit for Gito AI review -->
